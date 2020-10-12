@@ -7,9 +7,16 @@ import calculartion
 is_release = False
 
 """
-pytest -s [display print]
-pytest -rs [display skip reason]
-pytest -v [deiplay detail]
+> pytest -s [display print]
+> pytest -rs [display skip reason]
+> pytest -v [deiplay detail]
+
+coverage (install)
+> pip install pytest-cov pytest-xdist
+
+coverage (test)
+> pytest --cov=test_calculation --cov-report term-missing
+
 """
 
 class TestCal(object):
@@ -35,10 +42,18 @@ class TestCal(object):
 
     #@pytest.mark.skip(reason='skip!')
     #@pytest.mark.skipif(is_release==True, reason='skip!')
-    def test_add_num_and_double(self):
+    def test_add_num_and_double(self, request):
+        os_name = request.config.getoption('--os-name')
+        print(os_name)
+        if os_name == 'mac':
+            print('ls')
+        elif os_name == 'windows':
+            print('dir')
+
         assert self.cal.add_num_and_double(1, 1) == 4
 
-    def test_add_num_and_double_raise(self):
+    def test_add_num_and_double_raise(self, csv_file):
+        print(csv_file)
         with pytest.raises(ValueError):
             self.cal.add_num_and_double('1', '1')
 
